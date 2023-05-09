@@ -5,6 +5,9 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
+app.get("/", (req: express.Request, res: express.Response) => {
+  res.json({ message: "HOLA" });
+});
 
 app.use("/api/stock/", stockRouter);
 

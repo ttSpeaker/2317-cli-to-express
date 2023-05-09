@@ -32,6 +32,7 @@ export const createStockItemController = async (
 ) => {
   try {
     const newItemInput = req.body;
+    
     const result = await createStockItem(newItemInput);
     res.json(result);
   } catch (error: any) {
