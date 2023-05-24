@@ -6,6 +6,7 @@ import {
   itemQuantityChange,
   updateStockItem,
 } from "../bussiness-logic/updateStock";
+import {prisma} from './prisma'
 
 export const getStockController = async (req: Request, res: Response) => {
   try {

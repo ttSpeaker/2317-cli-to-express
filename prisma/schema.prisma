@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model orders {
+  id         String     @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
+  status     String     @default("CREATED") @db.VarChar(255)
+  userId     String     @db.VarChar(36)
+  created_at DateTime   @default(now()) @db.Timestamp(0)
+  updated_at DateTime   @default(now()) @db.Timestamp(0)
+  deleted_at DateTime?  @db.Timestamp(0)
+  user       users      @relation(fields: [userId], references: [id])
+  products   products[]
+}
+
+model orders_products {
+  id         String    @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
+  orderId    String    @db.VarChar(36)
+  productId  String    @db.VarChar(36)
+  quantity   Int
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model orders_products_with_complex_pk {
+  orderId    String    @db.VarChar(36)
+  productId  String    @db.VarChar(36)
+  quantity   Int
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+
+  @@id([orderId, productId])
+}
+
+model products {
+  id          String    @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
+  name        String    @db.VarChar(255)
+  description String    @db.VarChar(255)
+  price       Float     @db.Float
+  pictures    String?   @db.VarChar(255)
+  created_at  DateTime  @default(now()) @db.Timestamp(0)
+  updated_at  DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at  DateTime? @db.Timestamp(0)
+  orders      orders[]
+}
+
+model users {
+  id         String    @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
+  email      String    @db.VarChar(255)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+  orders     orders[]
+}
