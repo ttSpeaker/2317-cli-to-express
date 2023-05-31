@@ -1,19 +1,9 @@
-export type Item = {
+export type Product = {
   id?: string;
   name: string;
   description?: string;
   picture?: string;
   price: number;
-  category: Categories[];
-  quantity: number;
+  created_at: Date;
+  updated_at: Date;
 };
-
-export enum Categories {
-  Bebidas,
-  Indumentaria,
-  Juegos,
-  Electronica,
-  Celulares,
-  Libros,
-  Electrodomesticos,
-}

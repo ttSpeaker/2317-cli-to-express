@@ -1,6 +1,6 @@
 import express from "express";
-import { stockRouter } from "./stockRouter";
-import {createPrismaClient} from "./prisma"
+import { productRouter } from "./stockRouter";
+import { createPrismaClient } from "../repository/prisma";
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -10,9 +10,9 @@ app.get("/", (req: express.Request, res: express.Response) => {
   res.json({ message: "HOLA" });
 });
 
-app.use("/api/stock/", stockRouter);
+app.use("/api/stock/", productRouter);
 
 app.listen(PORT, () => {
-  createPrismaClient()
+  createPrismaClient();
   console.log("Server running on port 3000");
 });

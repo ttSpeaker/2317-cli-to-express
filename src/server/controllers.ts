@@ -1,81 +1,81 @@
 import { Request, Response, NextFunction } from "express";
-import { createStockItem } from "../bussiness-logic/createStockItem";
-import { deleteStockItem } from "../bussiness-logic/deleteStock";
-import { getStock, getStockItem } from "../bussiness-logic/getStock";
+import { createProduct } from "../bussiness-logic/createProduct";
+import { deleteStockItem as deleteProduct } from "../bussiness-logic/deleteProduct";
 import {
-  itemQuantityChange,
-  updateStockItem,
-} from "../bussiness-logic/updateStock";
-import {prisma} from './prisma'
+  getProduct,
+  getProductById,
+  getProductByName,
+} from "../bussiness-logic/getProduct";
+import { updateProduct } from "../bussiness-logic/updateStock";
+import { prisma } from "../repository/prisma";
 
 export const getStockController = async (req: Request, res: Response) => {
   try {
-    const result = await getStock();
+    const result = await getProduct();
     res.json(result);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const getStockItemController = async (req: Request, res: Response) => {
+export const getProductByIdController = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const result = await getStockItem(id);
-    res.json(result);
+    const result = await getProductById(id);
+    if (result) {
+      res.json(result);
+      return;
+    }
+    res.status(404).json({ message: `Product: ${id} not found` });
+    return;
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 };
-
-export const createStockItemController = async (
+export const getProductByNameController = async (
   req: Request,
   res: Response
 ) => {
+  try {
+    const name = req.params.name;
+    const result = await getProductByName(name);
+    if (result) {
+      res.json(result);
+      return;
+    }
+    res.status(404).json({ message: `Product: ${name} not found` });
+    return;
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+export const createProductController = async (req: Request, res: Response) => {
   try {
     const newItemInput = req.body;
-    
-    const result = await createStockItem(newItemInput);
+
+    const result = await createProduct(newItemInput);
     res.json(result);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const updateStockItemController = async (
-  req: Request,
-  res: Response
-) => {
-  try {
-    const itemInput = req.body;
-    const result = await updateStockItem(itemInput);
-    res.json(result);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const deleteStockItemController = async (
-  req: Request,
-  res: Response
-) => {
+export const updateProductController = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    await deleteStockItem(id);
+    const productInput = req.body;
+    const result = await updateProduct(id, productInput);
+    res.json(result);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteProductController = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    await deleteProduct(id);
     res.status(204).send();
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const itemQuantityChangeController = async (
-  req: Request,
-  res: Response
-) => {
-  try {
-    const id = req.params.id;
-    const quantity = +req.body.quantity;
-    const result = await itemQuantityChange(id, quantity);
-    res.json(result);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

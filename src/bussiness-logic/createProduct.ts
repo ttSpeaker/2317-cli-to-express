@@ -1,25 +1,18 @@
 import { Product } from "./types/Item";
 import { prisma } from "../repository/prisma";
-
-export async function updateProduct(id: string, product: Product) {
+export async function createProduct(product: Product): Promise<Product> {
   try {
-    if (id !== product.id) {
-      throw new Error("Id cant be different for product");
-    }
     const db = prisma();
-    const udpatedProduct = await db.products.update({
+    const createdProd = await db.products.create({
       data: {
         name: product.name,
         description: product.description ?? "",
         price: product.price,
         pictures: product.picture,
       },
-      where: {
-        id: id,
-      },
     });
 
-    return udpatedProduct;
+    return createdProd;
   } catch (err) {
     console.log(err);
     throw err;
