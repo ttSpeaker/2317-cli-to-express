@@ -10,7 +10,9 @@ export async function getProduct(): Promise<Product[]> {
   }
 }
 
-export async function getProductById(productId: string): Promise<Product | null> {
+export async function getProductById(
+  productId: string
+): Promise<Product | null> {
   try {
     const db = prisma();
     const product = await db.products.findUnique({
@@ -18,6 +20,7 @@ export async function getProductById(productId: string): Promise<Product | null>
         id: productId,
       },
     });
+
     return product;
   } catch (err) {
     console.log(err);
@@ -32,10 +35,12 @@ export async function getProductByName(name: string): Promise<Product | null> {
       where: {
         name: name,
       },
+      include: {
+        order: true,
+      },
     });
-  
-    return product;
 
+    return product;
   } catch (err) {
     console.log(err);
     throw err;

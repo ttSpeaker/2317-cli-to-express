@@ -9,6 +9,11 @@ export async function createProduct(product: Product): Promise<Product> {
         description: product.description ?? "",
         price: product.price,
         pictures: product.picture,
+        order: {
+          create: {
+            status: "created",
+          },
+        },
       },
     });
 
