@@ -1,4 +1,4 @@
-import { Product } from "./types/Item";
+import { Product } from "./types/Product";
 import { prisma } from "../repository/prisma";
 export async function createProduct(product: Product): Promise<Product> {
   try {

@@ -3,40 +3,52 @@ generator client {
 }
 
 datasource db {
-  provider     = "mongodb"
-  url          = env("MONGO_URL")
+  provider = "mongodb"
+  url      = env("MONGO_URL")
   // shadowDatabaseUrl  = env("SHADOW_DATABASE_URL")
   // relationMode = "prisma"
 }
+
 model orders {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  status     String    @default("CREATED") 
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  status     String     @default("CREATED")
   userId     String?    @db.ObjectId
-  user       users?    @relation(fields: [userId], references: [id])
-  created_at DateTime  @default(now()) @db.Timestamp()
-  updated_at DateTime  @default(now()) @db.Timestamp() @updatedAt
-  deleted_at DateTime? @db.Timestamp()
+  user       users?     @relation(fields: [userId], references: [id])
+  created_at DateTime   @default(now()) @db.Timestamp()
+  updated_at DateTime   @default(now()) @updatedAt @db.Timestamp()
+  deleted_at DateTime?  @db.Timestamp()
   products   products[]
 }
 
 model products {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String    @unique
-  description String    
-  price       Float   
-  pictures    String?   
+  description String
+  price       Float
+  pictures    String?
   created_at  DateTime  @default(now()) @db.Timestamp()
-  updated_at  DateTime  @default(now()) @db.Timestamp() @updatedAt
+  updated_at  DateTime  @default(now()) @updatedAt @db.Timestamp()
   deleted_at  DateTime? @db.Timestamp()
-  orderId     String? @db.ObjectId
-  order       orders? @relation(fields: [orderId], references: [id])
+  orderId     String?   @db.ObjectId
+  order       orders?   @relation(fields: [orderId], references: [id])
 }
 
 model users {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
   email      String    @unique
-  orders orders[]
+  orders     orders[]
   created_at DateTime  @default(now()) @db.Timestamp()
-  updated_at DateTime  @default(now()) @db.Timestamp() @updatedAt
+  updated_at DateTime  @default(now()) @updatedAt @db.Timestamp()
   deleted_at DateTime? @db.Timestamp()
+  gastos     gastos[]
+  contactdata contactData
+}
+
+type gastos {
+  id  String @map("_id") @db.ObjectId
+  monto   Float
+}
+type contactData {
+  cel String
+  email String 
 }

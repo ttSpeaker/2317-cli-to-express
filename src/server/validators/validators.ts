@@ -1,7 +1,7 @@
 import { query, validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 
-export function createItemValidator(
+export function RequestValidator(
   req: Request,
   res: Response,
   next: NextFunction

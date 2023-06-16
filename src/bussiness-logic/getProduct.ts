@@ -1,5 +1,5 @@
 import { prisma } from "../repository/prisma";
-import { Product } from "./types/Item";
+import { Product } from "./types/Product";
 
 export async function getProduct(): Promise<Product[]> {
   try {

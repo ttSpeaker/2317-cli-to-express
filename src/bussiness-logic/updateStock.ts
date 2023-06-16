@@ -1,4 +1,4 @@
-import { Product } from "./types/Item";
+import { Product } from "./types/Product";
 import { prisma } from "../repository/prisma";
 
 export async function updateProduct(id: string, product: Product) {
