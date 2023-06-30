@@ -2,14 +2,15 @@ import { Router, Request, Response, NextFunction } from "express";
 import * as controllers from "./ProductsController";
 import { RequestValidator as validator } from "./validators/validators";
 import { query, body } from "express-validator";
+import { authMiddleware } from "./middlewares/authMiddleware";
 export const productRouter = Router();
 
-//CRUD
-// CREATE - READ - UPDATE - DELETE
-productRouter.get("/", controllers.getStockController);
-productRouter.get("/name/:name", controllers.getProductByNameController);
+productRouter.get("/", controllers.getStockController); // libre
+productRouter.get("/name/:name", controllers.getProductByNameController); // libre
+productRouter.get("/:id", controllers.getProductByIdController); // libre
 
-productRouter.get("/:id", controllers.getProductByIdController);
+productRouter.use(authMiddleware) // MIDDLEWARE DE LOGIN
+
 productRouter.post(
   "/",
   body("name").isString().notEmpty(),
@@ -18,7 +19,7 @@ productRouter.post(
   body("price").isNumeric().notEmpty(),
   validator,
   controllers.createProductController
-);
+); // logueado
 productRouter.put(
   "/:id",
   body("id").isString().notEmpty(),
@@ -28,6 +29,5 @@ productRouter.put(
   body("price").isNumeric().notEmpty(),
   validator,
   controllers.updateProductController
-);
-
-productRouter.delete("/:id", controllers.deleteProductController);
+); //logueado
+productRouter.delete("/:id", controllers.deleteProductController); // logueado

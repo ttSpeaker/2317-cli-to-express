@@ -7,10 +7,10 @@ import {
   getProductByName,
 } from "../bussiness-logic/getProduct";
 import { updateProduct } from "../bussiness-logic/updateStock";
-import { prisma } from "../repository/prisma";
 
 export const getStockController = async (req: Request, res: Response) => {
   try {
+    console.log('Getting all products')
     const result = await getProduct();
     res.json(result);
   } catch (error: any) {

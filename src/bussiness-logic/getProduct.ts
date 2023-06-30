@@ -3,7 +3,15 @@ import { Product } from "./types/Product";
 
 export async function getProduct(): Promise<Product[]> {
   try {
-    throw new Error("Error");
+    try {
+      const db = prisma();
+      const products = await db.products.findMany();
+      console.log(products)
+      return products;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   } catch (err) {
     console.log(err);
     throw err;
