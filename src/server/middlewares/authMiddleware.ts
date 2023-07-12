@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from 'jsonwebtoken'
-
-const access_token_secret =  process.env.ACCESS_TOKEN_SECRET ?? ''
+import { getConfig } from "../config";
 
 //AUTENTICACION
 export const authMiddleware =  async (req: Request, res: Response, next: NextFunction) => {
@@ -12,11 +11,11 @@ export const authMiddleware =  async (req: Request, res: Response, next: NextFun
   }
   const token = header.split(" ")[1];
   try {
-    const data = jwt.verify(token, access_token_secret);
+    const data = jwt.verify(token, getConfig().accesTokenSecret);
     if (data) {
         res.locals.email  = (data as any).email;
         res.locals.role = (data as any).role;
-        
+        res.locals.userId = (data as any).role;
     next()
     return
     }

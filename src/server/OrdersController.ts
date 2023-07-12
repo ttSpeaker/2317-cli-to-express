@@ -18,7 +18,8 @@ import {
 export const getOrderByIdController = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const result = await getOrderById(id);
+    const userId = res.locals.userId
+    const result = await getOrderById(id, userId);
     if (result) {
       res.json(result);
       return;
@@ -52,6 +53,7 @@ export const updateOrderStatusController = async (
     res.status(500).json({ message: error.message });
   }
 };
+
 export const addProductToOrderController = async (
   req: Request,
   res: Response

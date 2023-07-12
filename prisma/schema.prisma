@@ -42,4 +42,3 @@ model users {
   updated_at DateTime  @default(now()) @updatedAt @db.Timestamp()
   deleted_at DateTime? @db.Timestamp()
 }
-

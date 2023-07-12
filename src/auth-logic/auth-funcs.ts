@@ -1,6 +1,10 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import {prisma} from '../repository/prisma'
+import sgMail from '@sendgrid/mail'
+
+const mailApiKey = process.env.EMAIL_API_KEY ?? ''
+sgMail.setApiKey(mailApiKey)
 
 const access_token_secret =  process.env.ACCESS_TOKEN_SECRET ?? ''
 const refresh_token_secret = process.env.REFRESH_TOKEN_SECRET ?? ''
@@ -16,7 +20,7 @@ export const login = async (email: string, password: string): Promise<loginRespo
         const result = await bcrypt.compare(password, user.password);
         if (result) {
           const accessToken = jwt.sign(
-            { email: email, role: "USER" },
+            { email: email, role: "USER", userId: user.id },
             access_token_secret,
             {
               expiresIn: "1h",
@@ -43,6 +47,15 @@ export const register = async (email: string, password: string): Promise<any> =>
         password: hash,
       },
     });
+    // mandar mail de bienvenida 
+    // luego se podria transformar en mail de verifiacion del email
+    sgMail.send( {
+      to: email, // Change to your recipient
+      from: 'rojiwe8738@eimatro.com', // Change to your verified sender
+      subject: 'Sending with SendGrid is Fun',
+      text: 'and easy to do anywhere, even with Node.js',
+      html: `<strong>Hello ${email} and easy to do anywhere, even with Node.js</strong>`,
+    })
     return user
   } catch (err) {
     throw err
